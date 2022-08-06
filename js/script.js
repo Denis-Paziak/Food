@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // slider
 
-    const slider = document.querySelector(".slider"),
+    const slider = document.querySelector(".offer__slider"),
         slides = slider.querySelectorAll(".offer__slide"),
         btnNext = slider.querySelector(".offer__slider-next"),
         btnPrev = slider.querySelector(".offer__slider-prev"),
