@@ -207,4 +207,100 @@ document.addEventListener("DOMContentLoaded", () => {
     btnPrev.addEventListener("click", prewSlide);
 
     showSlides();
+
+    // Calc
+    const calculatingResult = document.querySelector(".calculating__result span");
+    let sex, height, weight, age, ratio;
+
+    window.localStorage.setItem("sex", "female");
+    window.localStorage.setItem("ratio", 1.375);
+
+    sex = window.localStorage.getItem("sex");
+    ratio = window.localStorage.getItem("ratio");
+
+    const initCalc = (elements, activeClass) => {
+        elements = document.querySelectorAll(elements);
+
+        elements.forEach(el => {
+            el.classList.remove(activeClass);
+
+            if (el.id == sex) {
+                el.classList.add(activeClass);
+            }
+
+            if (el.dataset.ratio == ratio) {
+                el.classList.add(activeClass);
+            }
+        });
+
+
+    };
+
+    const calcTotal = () => {
+
+        if (!sex || !height || !weight || !age || !ratio) {
+            calculatingResult.textContent = "0";
+            return;
+        }
+
+        if (sex == "female") {
+            calculatingResult.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
+        } else {
+            calculatingResult.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
+        }
+
+    };
+    calcTotal();
+    const getInformation = (elements, activeClass) => {
+        elements = document.querySelectorAll(elements);
+        elements.forEach(el => {
+            el.addEventListener("click", () => {
+                if (el.dataset.ratio) {
+                    ratio = +el.dataset.ratio;
+                } else {
+                    sex = el.id;
+                };
+
+                elements.forEach(el => {
+                    el.classList.remove(activeClass);
+                });
+                el.classList.add(activeClass);
+                calcTotal();
+            });
+        });
+    };
+
+    const getInputInformation = (elements) => {
+        elements = document.querySelectorAll(elements);
+        elements.forEach(el => {
+            el.addEventListener("input", () => {
+                if (el.value.match(/\D/g)) {
+                    el.style.border = "1px solid red";
+                } else {
+                    el.style.border = "none";
+                }
+
+                switch (el.id) {
+                    case "height":
+                        height = +el.value;
+                        break;
+                    case "weight":
+                        weight = +el.value;
+                        break;
+                    case "age":
+                        age = +el.value;
+                        break;
+                }
+                calcTotal();
+            });
+        });
+    };
+
+    getInformation("#gender div", "calculating__choose-item_active");
+    getInformation(".calculating__choose_big div", "calculating__choose-item_active");
+
+    initCalc("#gender div", "calculating__choose-item_active");
+    initCalc(".calculating__choose_big div", "calculating__choose-item_active");
+
+    getInputInformation(".calculating__choose_medium input");
 });
